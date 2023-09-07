@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"web2022/internal/models"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func (api *API) UsersHandler(w http.ResponseWriter, r *http.Request) {
@@ -30,9 +33,51 @@ func (api *API) UsersHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 	case http.MethodPost:
-		//TODO
+		var user models.User
+		err := json.NewDecoder(r.Body).Decode(&user)
+		if err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		pwd, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		user.Password = string(pwd)
+
+		id, err := api.db.NewUser(user)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		err = json.NewEncoder(w).Encode(id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
 	case http.MethodDelete:
-		//TODO
+		type request struct {
+			id int
+		}
+
+		var req request
+		err := json.NewDecoder(r.Body).Decode(&req)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		err = api.db.DeleteUserByID(req.id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusUnauthorized)
 	}
 }

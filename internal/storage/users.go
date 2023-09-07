@@ -23,6 +23,13 @@ func (s *Storage) GetUserByID(id int) (models.User, error) {
 	return user, err
 }
 
+func (s *Storage) GetUserPasswordByName(name string) (string, error) {
+	var pwd string
+	err := s.pool.QueryRow(context.Background(), `SELECT password FROM users WHERE name = $1`, name).Scan(&pwd)
+
+	return pwd, err
+}
+
 func (s *Storage) NewUser(user models.User) (id int, err error) {
 	err = s.pool.QueryRow(context.Background(), `
 		INSERT INTO users(name, login, password, session_id)
@@ -39,7 +46,8 @@ func (s *Storage) NewUser(user models.User) (id int, err error) {
 
 func (s *Storage) DeleteUserByID(id int) (err error) {
 	_, err = s.pool.Exec(context.Background(), `
-		DELETE FROM users WHERE id = $1;`,
+		DELETE FROM users WHERE id = $1;
+		DELETE FROM notes WHERE user_id = $1;`,
 		id,
 	)
 	return err

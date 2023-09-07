@@ -1,4 +1,4 @@
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL DEFAULT '',
     login TEXT NOT NULL DEFAULT '',
@@ -6,7 +6,7 @@ CREATE TABLE users (
     session_id TEXT NOT NULL DEFAULT ''
 );
 
-CREATE TABLE notes(
+CREATE TABLE notes IF NOT EXISTS(
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL DEFAULT '',
     description TEXT,
