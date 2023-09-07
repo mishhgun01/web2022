@@ -7,6 +7,7 @@ import (
 	"web2022/internal/models"
 )
 
+// NotesCRUDHandler - обработчик запросов, связанных с сущностью заметки.
 func (api *API) NotesCRUDHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:

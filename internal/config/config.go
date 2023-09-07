@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// Config - структура конфига приложения.
 type Config struct {
 	CertFile string
 	KeyFile  string
@@ -19,6 +20,7 @@ type Config struct {
 	DbPwd    string
 }
 
+// Fill - заполнение полей конфига из системных переменных.
 func (cfg *Config) Fill() {
 	err := godotenv.Load("/home/mishhgun01/go/src/web2022/internal/config/local.env")
 	if err != nil {

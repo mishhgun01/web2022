@@ -5,6 +5,7 @@ import (
 	"web2022/internal/config"
 )
 
+// StartServer - запускает https сервер.
 func StartServer() error {
 	var cfg config.Config
 	cfg.Fill()

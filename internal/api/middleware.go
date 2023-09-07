@@ -7,6 +7,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// HeadersMiddleware - мидлвэр для установки заголовков и проведения http аутентификации и авторизации.
 func (api *API) HeadersMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(r.URL.Path, "/api/") {
@@ -37,6 +38,7 @@ func (api *API) HeadersMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+// verifyUserPassword - вспомогательная функци проверки совпадения паролей.
 func verifyUserPassword(dbPassword, gotPassword string) error {
 	return bcrypt.CompareHashAndPassword([]byte(dbPassword), []byte(gotPassword))
 }

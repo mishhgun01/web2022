@@ -11,12 +11,16 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// API - структура АПИ приложения.
 type API struct {
-	r  *mux.Router
+	// роутинг
+	r *mux.Router
+	// БД
 	db *storage.Storage
 	serveOptions
 }
 
+// serverOptions - опции для запуска сервера
 type serveOptions struct {
 	addr string
 	cert string

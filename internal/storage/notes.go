@@ -5,6 +5,7 @@ import (
 	"web2022/internal/models"
 )
 
+// CRUD методы работы БД с сущностью заметки.
 func (s *Storage) GetNotesByUserID(userID int) ([]models.Note, error) {
 	rows, err := s.pool.Query(context.Background(), `
 	SELECT id, name, description, status

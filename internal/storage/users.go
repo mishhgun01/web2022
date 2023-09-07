@@ -5,6 +5,7 @@ import (
 	"web2022/internal/models"
 )
 
+// Методы БД по работе с пользователем.
 func (s *Storage) GetUserByID(id int) (models.User, error) {
 	var user models.User
 

@@ -9,9 +9,11 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
+// Storage - структура драйвера для СУБД Postgres.
 type Storage struct {
 	mu *sync.Mutex
 
+	// пул соединений.
 	pool *pgxpool.Pool
 }
 
@@ -33,6 +35,7 @@ func intToInt32Array(in []int) []int32 {
 	return out
 }
 
+// Инициализация БД.
 func (s *Storage) Init() {
 	dat, err := ioutil.ReadFile("../internal/SQL/schema.sql")
 	if err != nil {

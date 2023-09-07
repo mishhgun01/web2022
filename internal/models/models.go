@@ -1,5 +1,6 @@
 package models
 
+// User - модель данных пользователя.
 type User struct {
 	ID        int
 	Name      string
@@ -8,6 +9,7 @@ type User struct {
 	SessionID string
 }
 
+// Note - модель данных заметки.
 type Note struct {
 	ID          int
 	UserID      int
