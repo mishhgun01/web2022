@@ -12,7 +12,7 @@ import (
 )
 
 type API struct {
-	R  *mux.Router
+	r  *mux.Router
 	db *storage.Storage
 	serveOptions
 }
@@ -38,7 +38,7 @@ func New(cfg config.Config) (*API, error) {
 	router := mux.NewRouter()
 
 	return &API{
-		R:  router,
+		r:  router,
 		db: s,
 		serveOptions: serveOptions{
 			addr: fmt.Sprintf("%s:%s", cfg.Host, cfg.Port),
@@ -49,12 +49,11 @@ func New(cfg config.Config) (*API, error) {
 }
 
 func (api *API) FillEndpoints() {
-	api.R.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "hello!")
-	})
+	api.r.HandleFunc("/api/v1/user", api.UsersHandler).Methods(http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodOptions)
+	api.r.HandleFunc("/api/v1/notes", api.NotesCRUDHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete, http.MethodOptions)
 }
 
 func (api *API) Serve() error {
 	log.Println("ping")
-	return http.ListenAndServeTLS(api.addr, api.cert, api.key, api.R)
+	return http.ListenAndServeTLS(api.addr, api.cert, api.key, api.r)
 }
