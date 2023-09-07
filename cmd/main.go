@@ -1,7 +1,15 @@
 package main
 
-import "web2022/internal/app"
+import (
+	"log"
+	"web2022/internal/app"
+)
 
 func main() {
-	panic(app.StartServer())
+	err := app.StartServer()
+
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
 }

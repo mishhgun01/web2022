@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -21,6 +22,7 @@ type Config struct {
 func (cfg *Config) Fill() {
 	err := godotenv.Load("/home/mishhgun01/go/src/web2022/internal/config/local.env")
 	if err != nil {
+		log.Println(err.Error())
 		panic(err)
 	}
 	cfg.CertFile = os.Getenv("CERT_FILE")

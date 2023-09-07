@@ -1,7 +1,7 @@
 package api
 
 import (
-	"crypto/tls"
+	"log"
 	"net/http"
 	"web2022/internal/config"
 	"web2022/internal/storage"
@@ -12,11 +12,15 @@ import (
 )
 
 type API struct {
-	R    *mux.Router
-	db   *storage.Storage
-	addr string
+	R  *mux.Router
+	db *storage.Storage
+	serveOptions
+}
 
-	TLSConfig *tls.Config
+type serveOptions struct {
+	addr string
+	cert string
+	key  string
 }
 
 func New(cfg config.Config) (*API, error) {
@@ -32,17 +36,14 @@ func New(cfg config.Config) (*API, error) {
 	}
 
 	router := mux.NewRouter()
-	cert, err := tls.LoadX509KeyPair(cfg.CertFile, cfg.KeyFile)
-	if err != nil {
-		return nil, err
-	}
 
 	return &API{
-		R:    router,
-		db:   s,
-		addr: fmt.Sprintf("%s:%s", cfg.Host, cfg.Port),
-		TLSConfig: &tls.Config{
-			Certificates: []tls.Certificate{cert},
+		R:  router,
+		db: s,
+		serveOptions: serveOptions{
+			addr: fmt.Sprintf("%s:%s", cfg.Host, cfg.Port),
+			cert: cfg.CertFile,
+			key:  cfg.KeyFile,
 		},
 	}, nil
 }
@@ -54,5 +55,6 @@ func (api *API) FillEndpoints() {
 }
 
 func (api *API) Serve() error {
-	return http.ListenAndServeTLS(api.addr, "", "", api.R)
+	log.Println("ping")
+	return http.ListenAndServeTLS(api.addr, api.cert, api.key, api.R)
 }
