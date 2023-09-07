@@ -1,6 +1,10 @@
 package config
 
-import "os"
+import (
+	"os"
+
+	"github.com/joho/godotenv"
+)
 
 type Config struct {
 	CertFile string
@@ -15,6 +19,10 @@ type Config struct {
 }
 
 func (cfg *Config) Fill() {
+	err := godotenv.Load("/home/mishhgun01/go/src/web2022/internal/config/local.env")
+	if err != nil {
+		panic(err)
+	}
 	cfg.CertFile = os.Getenv("CERT_FILE")
 	cfg.KeyFile = os.Getenv("KEY_FILE")
 	cfg.Host = os.Getenv("SERVER_HOST")
