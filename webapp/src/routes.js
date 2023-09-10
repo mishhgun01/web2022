@@ -1,5 +1,6 @@
 import MainView from "@/views/MainView";
 import LoginComponent from "@/components/LoginComponent";
+import NoteCard from "@/components/NoteCard";
 
 const routes = [
     {
@@ -9,6 +10,11 @@ const routes = [
     {
         path: "/sign-in",
         component: LoginComponent
+    },
+    {
+        path: "/note-card/:opt",
+        name: "noteCard",
+        component: NoteCard
     }
 ]
 

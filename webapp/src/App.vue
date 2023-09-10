@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div v-if="auth">
+    <div v-if="$router.currentRoute.path !== '/sign-in'">
       <HeaderComponent ref="header"/>
     </div>
     <div class="app_body">
@@ -16,20 +16,7 @@ import HeaderComponent from './components/HeaderComponent.vue';
 export default {
   name: 'App',
   components: {
-    HeaderComponent,
-  },
-  data() {
-    return {
-      auth: false
-    }
-  },
-  created() {
-    console.log(this.$router)
-  },
-  methods: {
-    loggedIn(param) {
-      console.log(param)
-    }
+    HeaderComponent
   }
 }
 </script>
@@ -51,9 +38,6 @@ body {
 .app_body{
   display: flex;
   justify-content: center;
-}
-
-.MainView {
   margin-top: 100px;
 }
 </style>

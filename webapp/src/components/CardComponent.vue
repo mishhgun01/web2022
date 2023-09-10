@@ -2,17 +2,14 @@
     <div>
         <Card style="width: 30rem; height: 30rem; margin-bottom: 5em">
             <template #title>
-                {{ opt.name }}
+                {{ opt.Name }}
             </template>
             <template #content>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
-                quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
-                quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
+                <Editor :value="opt.Description" :readonly="true" editorStyle="height: 250px"/>
             </template>
             <template #footer>
                 <Button icon="pi pi-trash" label="Удалить" />
-                <Button icon="pi pi-pencil" label="Редактировать" class="p-button-secondary" style="margin-left: .5em" />
+                <Button icon="pi pi-pencil" label="Редактировать" class="p-button-secondary" style="margin-left: .5em" @click="openCard"/>
             </template>
         </Card>
     </div>
@@ -22,6 +19,7 @@
 
 import Card from "primevue/card"
 import Button from "primevue/button"
+import Editor from "primevue/editor";
 import "primevue/resources/themes/saga-blue/theme.css"
 import "primevue/resources/primevue.min.css"
 import "primeicons/primeicons.css"
@@ -30,7 +28,8 @@ export default {
     name: 'CardComponent',
     components: {
         Card,
-        Button
+        Button,
+      Editor
     },
     props: {
         opt: Object
@@ -42,7 +41,12 @@ export default {
     },
     created() {
         console.log(this.opt)
-    }
+    },
+  methods: {
+      openCard() {
+        this.$emit("openCard", this.opt)
+      }
+  }
 }
 </script>
 

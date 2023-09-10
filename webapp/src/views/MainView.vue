@@ -1,12 +1,13 @@
 <template>
     <div class="container">
         <div v-for="(opt, idx) of options" :key="idx">
-            <CardComponent :opt="opt"/>
+            <CardComponent  v-if="!selectedCard" :opt="opt" @openCard="openCard"/>
         </div>
     </div>
 </template>
 <script>
 import CardComponent from "../components/CardComponent"
+import {getNotes} from "@/api/notes";
 
 export default {
     components: {
@@ -15,7 +16,8 @@ export default {
     data() {
         return {
             checked: null,
-            options: []
+            options: [],
+          selectedCard: null
         }
     },
     created() {
@@ -24,8 +26,20 @@ export default {
         this.$router.push("/sign-in")
         return
       }
-      this.options.push(...[{name: "1", value: 1}, {name: "2", value: 2}, {name: "3", value: 3}, {name: "3", value: 3}, {name: "3", value: 3}, {name: "3", value: 3}])
+      this.getData()
+    },
+  methods: {
+      getData() {
+        getNotes()
+            .then(r => {
+              this.options = r.data
+            })
+      },
+    openCard(opt) {
+        opt.isNew = false
+        this.$router.push({name: "noteCard", params: { opt: opt } })
     }
+  }
 }
 </script>
 <style scoped>

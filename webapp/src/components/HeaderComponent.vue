@@ -21,14 +21,23 @@ export default {
         label: 'Add',
         icon: 'pi pi-plus',
         command: () => {
-            this.$toast.add({ severity: 'info', summary: 'Add', detail: 'Data Added' });
+          this.$router.push({
+            name: "noteCard", params: { opt: {
+                Name: "",
+                Description: "",
+                Status: 1,
+                isNew: true
+              }
+            }
+          });
         }
     },
     {
         label: 'Delete',
         icon: 'pi pi-sign-out',
         command: () => {
-            this.$toast.add({ severity: 'error', summary: 'Delete', detail: 'Data Deleted' });
+            this.$router.push("/sign-in");
+            localStorage.clear()
         }
     }
 ]

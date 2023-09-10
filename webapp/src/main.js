@@ -21,9 +21,14 @@ export const url = Vue.prototype.$baseUrl
 import routes from '@/routes'
 
 const router = new VueRouter({
-  history: 'history',
   routes
 })
+import ToastService from 'primevue/toastservice';
+Vue.use(ToastService);
+import { EmojiPickerPlugin } from 'vue-emoji-picker'
+Vue.use(EmojiPickerPlugin)
+
+Vue.use(VueRouter)
 new Vue({
   router,
   render: h => h(App),
