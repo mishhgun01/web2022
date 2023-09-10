@@ -36,3 +36,14 @@ export function patchNote(data) {
     data.UserID = user.ID
     return authOpts.patch(url + "/api/v1/notes", data)
 }
+
+export function deleteNote(opt) {
+    const user = JSON.parse(localStorage.getItem("User"))
+    const authToken = btoa(`${user.Login}:${user.Password}`)
+    const authOpts = axios.create({
+        headers: {
+            Authorization : `Basic ${authToken}`
+        }
+    })
+    return authOpts.delete(url + "/api/v1/notes", {data: opt})
+}

@@ -8,7 +8,7 @@
                 <Editor :value="opt.Description" :readonly="true" editorStyle="height: 250px"/>
             </template>
             <template #footer>
-                <Button icon="pi pi-trash" label="Удалить" />
+                <Button icon="pi pi-trash" label="Удалить" @click="deleteNote"/>
                 <Button icon="pi pi-pencil" label="Редактировать" class="p-button-secondary" style="margin-left: .5em" @click="openCard"/>
             </template>
         </Card>
@@ -45,7 +45,10 @@ export default {
   methods: {
       openCard() {
         this.$emit("openCard", this.opt)
-      }
+      },
+    deleteNote() {
+        this.$emit("delete", this.opt)
+    }
   }
 }
 </script>

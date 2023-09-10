@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"web2022/internal/models"
@@ -66,23 +67,18 @@ func (api *API) NotesCRUDHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 	case http.MethodDelete:
-		type request struct {
-			id int
-		}
-
-		var req request
+		var req models.Note
 		err := json.NewDecoder(r.Body).Decode(&req)
+		log.Println(req)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		err = api.db.DeleteUserByID(req.id)
+		err = api.db.DeleteNoteByID(req.ID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-
-		w.WriteHeader(http.StatusUnauthorized)
 	}
 }
