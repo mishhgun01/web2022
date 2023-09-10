@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"log"
 	"web2022/internal/models"
 )
 
@@ -24,14 +25,33 @@ func (s *Storage) GetUserByID(id int) (models.User, error) {
 	return user, err
 }
 
+func (s *Storage) GetUserByName(name string) (models.User, error) {
+	var user models.User
+
+	err := s.pool.QueryRow(context.Background(), `
+		SELECT id, name, login, password, session_id
+		FROM users WHERE login = $1`,
+		name,
+	).Scan(
+		&user.ID,
+		&user.Name,
+		&user.Login,
+		&user.Password,
+		&user.SessionID,
+	)
+
+	return user, err
+}
+
 func (s *Storage) GetUserPasswordByName(name string) (string, error) {
 	var pwd string
-	err := s.pool.QueryRow(context.Background(), `SELECT password FROM users WHERE name = $1`, name).Scan(&pwd)
+	err := s.pool.QueryRow(context.Background(), `SELECT password FROM users WHERE login = $1`, name).Scan(&pwd)
 
 	return pwd, err
 }
 
 func (s *Storage) NewUser(user models.User) (id int, err error) {
+	log.Println(user)
 	err = s.pool.QueryRow(context.Background(), `
 		INSERT INTO users(name, login, password, session_id)
 		VALUES ($1, $2, $3, $4)

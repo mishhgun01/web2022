@@ -19,7 +19,12 @@ export default {
         }
     },
     created() {
-        this.options.push(...[{name: "1", value: 1}, {name: "2", value: 2}, {name: "3", value: 3}, {name: "3", value: 3}, {name: "3", value: 3}, {name: "3", value: 3}])
+      const user = localStorage.getItem("User")
+      if (!user) {
+        this.$router.push("/sign-in")
+        return
+      }
+      this.options.push(...[{name: "1", value: 1}, {name: "2", value: 2}, {name: "3", value: 3}, {name: "3", value: 3}, {name: "3", value: 3}, {name: "3", value: 3}])
     }
 }
 </script>

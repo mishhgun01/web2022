@@ -41,7 +41,7 @@ func (api *API) UsersHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		pwd, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
+		pwd, err := bcrypt.GenerateFromPassword([]byte(user.Password), 16)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -54,8 +54,9 @@ func (api *API) UsersHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		user.ID = id
 
-		err = json.NewEncoder(w).Encode(id)
+		err = json.NewEncoder(w).Encode(user)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

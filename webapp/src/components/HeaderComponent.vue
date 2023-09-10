@@ -1,8 +1,8 @@
 <template>
     <div class="header">
-        <div class="header-btns">
-            <SpeedDial :model="items"/>
-        </div>
+    <div class="speeddial-tooltip-demo" :style="{ position: 'relative', height: '350px' }">
+        <SpeedDial :model="items" :radius="75" type="quarter-circle" showIcon="pi pi-bars" hideIcon="pi pi-times" direction="down-right"/>
+    </div>
     </div>
 </template>
 <script>
@@ -19,37 +19,16 @@ export default {
             items: [
     {
         label: 'Add',
-        icon: 'pi pi-pencil',
+        icon: 'pi pi-plus',
         command: () => {
             this.$toast.add({ severity: 'info', summary: 'Add', detail: 'Data Added' });
         }
     },
     {
-        label: 'Update',
-        icon: 'pi pi-refresh',
-        command: () => {
-            this.$toast.add({ severity: 'success', summary: 'Update', detail: 'Data Updated' });
-        }
-    },
-    {
         label: 'Delete',
-        icon: 'pi pi-trash',
+        icon: 'pi pi-sign-out',
         command: () => {
             this.$toast.add({ severity: 'error', summary: 'Delete', detail: 'Data Deleted' });
-        }
-    },
-    {
-        label: 'Upload',
-        icon: 'pi pi-upload',
-        command: () => {
-            window.location.hash = "/fileupload"
-        }
-    },
-    {
-        label: 'Vue Website',
-        icon: 'pi pi-external-link',
-        command: () => {
-            window.location.href = 'https://vuejs.org/'
         }
     }
 ]
@@ -68,14 +47,16 @@ export default {
 </script>
 <style scoped>
 .header {
+    position: absolute;
     display: flex;
     flex-direction: row;
     align-content: space-between;
-    background-color: #94d1be;
+    background-color: #0012b4;
     margin: 0;
     padding: 5px;
     width: 100%;
-    height: 100px;
+    height: 50px;
+    top:0;
 }
 .header-btns {
     display: flex;

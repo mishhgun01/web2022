@@ -53,9 +53,11 @@ func New(cfg config.Config) (*API, error) {
 }
 
 func (api *API) FillEndpoints() {
+	api.r.HandleFunc("/api/v1/ping", api.ping).Methods(http.MethodGet, http.MethodOptions)
 	api.r.HandleFunc("/api/v1/user", api.UsersHandler).Methods(http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodOptions)
 	api.r.HandleFunc("/api/v1/notes", api.NotesCRUDHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete, http.MethodOptions)
 	api.r.Use(api.HeadersMiddleware)
+	api.r.Use(api.AuthMiddleware)
 	api.r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("/home/mishhgun01/go/src/web2022/webapp/dist"))))
 }
 

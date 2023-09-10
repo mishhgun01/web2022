@@ -1,23 +1,36 @@
 <template>
   <div id="app">
-    <div>
+    <div v-if="auth">
       <HeaderComponent ref="header"/>
     </div>
-    <MainView/>
+    <div class="app_body">
+      <router-view/>
+    </div>
   </div>
 </template>
 
 <script>
 
 import HeaderComponent from './components/HeaderComponent.vue';
-import MainView from './views/MainView.vue';
 
 export default {
   name: 'App',
   components: {
-    MainView,
-    HeaderComponent
-}
+    HeaderComponent,
+  },
+  data() {
+    return {
+      auth: false
+    }
+  },
+  created() {
+    console.log(this.$router)
+  },
+  methods: {
+    loggedIn(param) {
+      console.log(param)
+    }
+  }
 }
 </script>
 
@@ -28,11 +41,19 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 
 body {
   margin: 0;
+}
+
+.app_body{
+  display: flex;
+  justify-content: center;
+}
+
+.MainView {
+  margin-top: 100px;
 }
 </style>
