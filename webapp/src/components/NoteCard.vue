@@ -65,11 +65,13 @@ export default {
     },
   },
   created() {
+
+    document.cookie = "lastPath=" + this.$route.path
     const obj = this.$route.params.opt
-    this.name = obj.Name
-    this.description = obj.Description
-    this.status = obj.Status
-    this.isNew = obj.isNew
+    this.name = obj.Name || ""
+    this.description = obj.Description || ""
+    this.status = obj.Status || 1
+    this.isNew = obj.isNew || ""
     this.ID = obj.ID || 0
   },
   methods: {

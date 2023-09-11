@@ -17,6 +17,12 @@ export default {
   name: 'App',
   components: {
     HeaderComponent
+  },
+  created() {
+    const path = document.cookie.split(";").find(el=> el.includes("lastPath=")).split("=")[1]
+    if (path) {
+      this.$router.push(path)
+    }
   }
 }
 </script>

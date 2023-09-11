@@ -23,47 +23,43 @@
 import CardComponent from "../components/CardComponent"
 import Dialog from 'primevue/dialog'
 import Button from "primevue/button";
-import {getNotes, deleteNote} from "@/api/notes";
-
 export default {
-    components: {
-        CardComponent,
-      Dialog,
-      Button
-    },
-    data() {
-        return {
-            checked: null,
-            options: [],
-          selectedCard: null,
-          displayMaximizable: false,
-          newNote: false
-        }
-    },
-    created() {
-      const user = localStorage.getItem("User")
-      if (!user) {
-        this.$router.push("/sign-in")
-        return
-      }
-      this.getData()
-      if (!this.options?.length) {
-        this.newNote = true
-      }
-    },
+  components: {
+    CardComponent,
+    Dialog,
+    Button
+  },
+  data() {
+    return {
+      checked: null,
+      options: [],
+      selectedCard: null,
+      displayMaximizable: false,
+      newNote: false
+    }
+  },
+  created() {
+    document.cookie = "lastPath=/"
+    const user = localStorage.getItem("User")
+    if (!user) {
+      this.$router.push("/sign-in")
+      return
+    }
+    this.getData()
+  },
   methods: {
-      getData() {
-        getNotes()
-            .then(r => {
-              this.options = r.data
-              if (this.options.length) {
-                this.newNote = false
-              }
-            })
-      },
+    getData() {
+      getNotes()
+          .then(r => {
+            this.options = r.data
+            if (!this.options?.length) {
+              this.newNote = true
+            }
+          })
+    },
     openCard(opt) {
-        opt.isNew = false
-        this.$router.push({name: "noteCard", params: { opt: opt } })
+      opt.isNew = false
+      this.$router.push({name: "noteCard", params: { opt: opt } })
     },
     deleteNoteConfirmation(opt) {
       this.selectedCard = opt
@@ -99,6 +95,8 @@ export default {
     }
   }
 }
+
+import {getNotes, deleteNote} from "@/api/notes";
 </script>
 <style scoped>
 
