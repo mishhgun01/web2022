@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  database:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=testdb
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ../2. Init Database:/docker-entrypoint-initdb.d
+      - .:/var/lib/postgresql/data
+    ports:
+      - 5431:5431
+  server:
+    build: .
+    ports:
+      - 8081:8081
+    restart: always
+    depends_on:
+      - database
+      - web
+    environment:
+      - CERT_FILE=/app/localhost.crt
+      - KEY_FILE=/app/localhost.key
+      - SERVER_HOST=localhost
+      - SERVER_PORT=8081
+      - DB_NAME=testdb
+      - DB_HOST=database
+      - DB_USER=test
+      - DB_PORT=5432
+      - DB_PASSWORD=test
+  web:
+    build: webapp/.

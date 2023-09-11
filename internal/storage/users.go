@@ -67,8 +67,15 @@ func (s *Storage) NewUser(user models.User) (id int, err error) {
 
 func (s *Storage) DeleteUserByID(id int) (err error) {
 	_, err = s.pool.Exec(context.Background(), `
-		DELETE FROM users WHERE id = $1;
 		DELETE FROM notes WHERE user_id = $1;`,
+		id,
+	)
+	if err != nil {
+		return err
+	}
+
+	_, err = s.pool.Exec(context.Background(), `
+		DELETE FROM users WHERE id = $1;`,
 		id,
 	)
 	return err

@@ -1,10 +1,9 @@
 package config
 
 import (
+	"github.com/joho/godotenv"
 	"log"
 	"os"
-
-	"github.com/joho/godotenv"
 )
 
 // Config - структура конфига приложения.
@@ -18,17 +17,24 @@ type Config struct {
 	DbUser   string
 	DbPort   string
 	DbPwd    string
+	WebDir   string
 }
+
+const projectDirName = "web2022/internal/config" // change to relevant project name
 
 // Fill - заполнение полей конфига из системных переменных.
 func (cfg *Config) Fill() {
-	err := godotenv.Load("/home/mishhgun01/go/src/web2022/internal/config/local.env")
+
+	currentWorkDirectory, _ := os.Getwd()
+	serverWorkDir := currentWorkDirectory + "/internal/"
+
+	err := godotenv.Load(serverWorkDir + `config/local.env`)
 	if err != nil {
 		log.Println(err.Error())
-		panic(err)
+		panic(err.Error())
 	}
-	cfg.CertFile = os.Getenv("CERT_FILE")
-	cfg.KeyFile = os.Getenv("KEY_FILE")
+	cfg.CertFile = serverWorkDir + "config/" + os.Getenv("CERT_FILE")
+	cfg.KeyFile = serverWorkDir + "config/" + os.Getenv("KEY_FILE")
 	cfg.Host = os.Getenv("SERVER_HOST")
 	cfg.Port = os.Getenv("SERVER_PORT")
 	cfg.DbName = os.Getenv("DB_NAME")
@@ -36,4 +42,5 @@ func (cfg *Config) Fill() {
 	cfg.DbUser = os.Getenv("DB_USER")
 	cfg.DbPort = os.Getenv("DB_PORT")
 	cfg.DbPwd = os.Getenv("DB_PASSWORD")
+	cfg.WebDir = currentWorkDirectory + "/webapp/" + os.Getenv("WEB_DIR")
 }

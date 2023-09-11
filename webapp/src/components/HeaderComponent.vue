@@ -1,7 +1,10 @@
 <template>
     <div class="header">
-    <div class="speeddial-tooltip-demo" :style="{ position: 'relative', height: '350px' }">
-        <SpeedDial :model="items" :radius="75" type="quarter-circle" showIcon="pi pi-bars" hideIcon="pi pi-times" direction="down-right"/>
+    <div class="speeddial-tooltip-demo" :style="{ position: 'relative', height: '400px' }">
+        <SpeedDial :model="items" :radius="60" showIcon="pi pi-bars" hideIcon="pi pi-times" direction="down"/>
+      <div class="title">
+        <h3>Мои заметки</h3>
+      </div>
     </div>
     </div>
 </template>
@@ -19,7 +22,7 @@ export default {
             items: [
     {
         label: 'Add',
-        icon: 'pi pi-plus',
+        icon: 'pi pi-pencil',
         command: () => {
           this.$router.push({
             name: "noteCard", params: { opt: {
@@ -36,8 +39,8 @@ export default {
         label: 'Delete',
         icon: 'pi pi-sign-out',
         command: () => {
-            this.$router.push("/sign-in");
-            localStorage.clear()
+            localStorage.clear();
+            this.$router.push("/sign-in")
         }
     }
 ]
@@ -67,32 +70,9 @@ export default {
     height: 50px;
     top:0;
 }
-.header-btns {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-left: auto;
-}
-.header-btn {
-    margin-right: 1vw;
-    border: 0;
-}
-.header-logo {
-    height: 4vw;
-    min-height: 45px;
-}
-.mobile{
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    justify-content: space-between;
-    z-index: 100;
-    padding: 0;
-    margin: 0;
-    align-content: center;
-    width: 100%;
-    left: 0;
-    background-color: #363537;
-    box-shadow: 0 -5px 10px black;
+
+.title {
+  margin-left: 150px;
+  color: white;
 }
 </style>

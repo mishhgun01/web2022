@@ -56,6 +56,9 @@ export default {
         getNotes()
             .then(r => {
               this.options = r.data
+              if (this.options.length) {
+                this.newNote = false
+              }
             })
       },
     openCard(opt) {
