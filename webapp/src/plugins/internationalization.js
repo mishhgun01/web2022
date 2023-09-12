@@ -64,10 +64,10 @@ const words = {
     }
 }
 
-const locale = localStorage.getItem("locale") || "en"
+const locale = localStorage.getItem("locale") || "ru"
 
 export const i18n = new VueI18n({
     locale,
-    fallbackLocale: 'en',
+    fallbackLocale: 'ru',
     messages: words
 })
