@@ -41,7 +41,7 @@ func New(cfg config.Config) (*API, error) {
 	}
 
 	router := mux.NewRouter()
-	//s.Init()
+	s.Init()
 	return &API{
 		r:  router,
 		db: s,

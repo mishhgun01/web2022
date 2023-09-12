@@ -24,17 +24,16 @@ const projectDirName = "web2022/internal/config" // change to relevant project n
 
 // Fill - заполнение полей конфига из системных переменных.
 func (cfg *Config) Fill() {
-
-	currentWorkDirectory, _ := os.Getwd()
-	serverWorkDir := currentWorkDirectory + "/internal/"
-
-	err := godotenv.Load(serverWorkDir + `config/local.env`)
+	wd, err := os.Getwd()
 	if err != nil {
-		log.Println(err.Error())
-		panic(err.Error())
+		panic(err)
 	}
-	cfg.CertFile = serverWorkDir + "config/" + os.Getenv("CERT_FILE")
-	cfg.KeyFile = serverWorkDir + "config/" + os.Getenv("KEY_FILE")
+
+	configDir := "/internal/config/"
+	webDir := "/webapp/"
+	godotenv.Load(wd + configDir + "local.env")
+	cfg.CertFile = wd + configDir + os.Getenv("CERT_FILE")
+	cfg.KeyFile = wd + configDir + os.Getenv("KEY_FILE")
 	cfg.Host = os.Getenv("SERVER_HOST")
 	cfg.Port = os.Getenv("SERVER_PORT")
 	cfg.DbName = os.Getenv("DB_NAME")
@@ -42,5 +41,6 @@ func (cfg *Config) Fill() {
 	cfg.DbUser = os.Getenv("DB_USER")
 	cfg.DbPort = os.Getenv("DB_PORT")
 	cfg.DbPwd = os.Getenv("DB_PASSWORD")
-	cfg.WebDir = currentWorkDirectory + "/webapp/" + os.Getenv("WEB_DIR")
+	cfg.WebDir = wd + webDir + os.Getenv("WEB_DIR")
+	log.Println(cfg.WebDir)
 }

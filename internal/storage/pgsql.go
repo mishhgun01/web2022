@@ -4,6 +4,7 @@ import (
 	"context"
 	"io/ioutil"
 	"log"
+	"os"
 	"sync"
 
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -37,7 +38,8 @@ func intToInt32Array(in []int) []int32 {
 
 // Инициализация БД.
 func (s *Storage) Init() {
-	dat, err := ioutil.ReadFile("../internal/SQL/schema.sql")
+	wd, _ := os.Getwd()
+	dat, err := ioutil.ReadFile(wd + "/internal/SQL/schema.sql")
 	if err != nil {
 		log.Fatal(err.Error())
 	}

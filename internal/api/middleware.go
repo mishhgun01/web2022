@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"golang.org/x/crypto/bcrypt"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -25,21 +26,27 @@ func (api *API) HeadersMiddleware(next http.Handler) http.Handler {
 			w.Header().Set("Access-Control-Allow-Headers", "*")
 			w.Header().Set("Access-Control-Allow-Origin", "*")
 			w.Header().Set("Content-Type", "application/json")
-		}
-		userName, _, ok := r.BasicAuth()
-		if !ok {
-			http.Error(w, errors.New("not authorized").Error(), http.StatusUnauthorized)
-		}
 
-		user, err := api.db.GetUserByName(userName)
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			return
+			if strings.Contains(r.URL.Path, "/api/v1/user") && (r.Method == http.MethodPost || r.Method == http.MethodOptions) {
+				next.ServeHTTP(w, r)
+				return
+			}
+
+			userName, _, ok := r.BasicAuth()
+			if !ok {
+				http.Error(w, errors.New("not authorized").Error(), http.StatusUnauthorized)
+			}
+
+			user, err := api.db.GetUserByName(userName)
+			if err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
+			r.AddCookie(&http.Cookie{
+				Name:  "lastPath",
+				Value: user.LastPath,
+			})
 		}
-		r.AddCookie(&http.Cookie{
-			Name:  "lastPath",
-			Value: user.LastPath,
-		})
 
 		next.ServeHTTP(w, r)
 	})
@@ -60,6 +67,7 @@ func (api *API) AuthMiddleware(next http.Handler) http.Handler {
 			if (strings.Contains(r.URL.Path, "/api/v1/ping") || strings.Contains(r.URL.Path, "/api/v1/user")) && r.Method == http.MethodGet {
 				flag = bcrypt.CompareHashAndPassword([]byte(pwd), []byte(pass))
 			}
+			log.Println(flag, ok, user, pass, pwd)
 			if !ok || err != nil || flag != nil {
 				w.Header().Set("Notes-WWW-Authenticate", `Basic realm="api"`)
 				http.Error(w, "Unauthorized", http.StatusUnauthorized)
