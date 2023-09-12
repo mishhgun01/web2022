@@ -27,25 +27,6 @@ func (api *API) HeadersMiddleware(next http.Handler) http.Handler {
 			w.Header().Set("Access-Control-Allow-Origin", "*")
 			w.Header().Set("Content-Type", "application/json")
 
-			if strings.Contains(r.URL.Path, "/api/v1/user") && (r.Method == http.MethodPost || r.Method == http.MethodOptions) {
-				next.ServeHTTP(w, r)
-				return
-			}
-
-			userName, _, ok := r.BasicAuth()
-			if !ok {
-				http.Error(w, errors.New("not authorized").Error(), http.StatusUnauthorized)
-			}
-
-			user, err := api.db.GetUserByName(userName)
-			if err != nil {
-				w.WriteHeader(http.StatusBadRequest)
-				return
-			}
-			r.AddCookie(&http.Cookie{
-				Name:  "lastPath",
-				Value: user.LastPath,
-			})
 		}
 
 		next.ServeHTTP(w, r)
@@ -74,15 +55,21 @@ func (api *API) AuthMiddleware(next http.Handler) http.Handler {
 				return
 			}
 
+			data, err := api.db.GetUserByName(user)
+			if err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
 			if r.Method == http.MethodGet && strings.Contains(r.URL.Path, "/api/v1/user") {
-				data, err := api.db.GetUserByName(user)
-				if err != nil {
-					w.WriteHeader(http.StatusBadRequest)
-					return
-				}
 				json.NewEncoder(w).Encode(data)
 				return
 			}
+
+			r.AddCookie(&http.Cookie{
+				Name:  "lastPath",
+				Value: data.LastPath,
+			})
+
 		}
 		next.ServeHTTP(w, r)
 	})
@@ -93,5 +80,5 @@ func verifyUserPassword(dbPassword, gotPassword string) error {
 	if dbPassword == gotPassword {
 		return nil
 	}
-	return errors.New("Wrong pwd")
+	return errors.New("Wrong password")
 }
