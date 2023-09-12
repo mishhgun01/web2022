@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"golang.org/x/crypto/bcrypt"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -13,8 +12,8 @@ import (
 func (api *API) HeadersMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(r.URL.Path, "/api/") {
-			if r.Method == http.MethodOptions {
 
+			if r.Method == http.MethodOptions {
 				w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS")
 				w.Header().Set("Access-Control-Allow-Headers", "*")
 				w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -45,10 +44,11 @@ func (api *API) AuthMiddleware(next http.Handler) http.Handler {
 			user, pass, ok := r.BasicAuth()
 			pwd, err := api.db.GetUserPasswordByName(user)
 			flag := verifyUserPassword(pwd, pass)
+
 			if (strings.Contains(r.URL.Path, "/api/v1/ping") || strings.Contains(r.URL.Path, "/api/v1/user")) && r.Method == http.MethodGet {
 				flag = bcrypt.CompareHashAndPassword([]byte(pwd), []byte(pass))
 			}
-			log.Println(flag, ok, user, pass, pwd)
+
 			if !ok || err != nil || flag != nil {
 				w.Header().Set("Notes-WWW-Authenticate", `Basic realm="api"`)
 				http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -60,6 +60,7 @@ func (api *API) AuthMiddleware(next http.Handler) http.Handler {
 				w.WriteHeader(http.StatusBadRequest)
 				return
 			}
+
 			if r.Method == http.MethodGet && strings.Contains(r.URL.Path, "/api/v1/user") {
 				json.NewEncoder(w).Encode(data)
 				return
