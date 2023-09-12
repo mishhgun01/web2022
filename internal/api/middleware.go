@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"golang.org/x/crypto/bcrypt"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -44,7 +45,7 @@ func (api *API) AuthMiddleware(next http.Handler) http.Handler {
 			user, pass, ok := r.BasicAuth()
 			pwd, err := api.db.GetUserPasswordByName(user)
 			flag := verifyUserPassword(pwd, pass)
-
+			log.Println(pwd, pass, user)
 			if (strings.Contains(r.URL.Path, "/api/v1/ping") || strings.Contains(r.URL.Path, "/api/v1/user")) && r.Method == http.MethodGet {
 				flag = bcrypt.CompareHashAndPassword([]byte(pwd), []byte(pass))
 			}

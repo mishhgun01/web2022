@@ -9,6 +9,7 @@ Vue.use(PrimeVue)
 import "primevue/resources/themes/saga-blue/theme.css"
 import "primevue/resources/primevue.min.css"
 import "primeicons/primeicons.css"
+import {i18n} from "@/plugins/internationalization";
 
 import http from './plugins/http';
 
@@ -30,6 +31,7 @@ import VueI18n from 'vue-i18n'
 Vue.use(VueI18n)
 Vue.use(VueRouter)
 new Vue({
+  i18n,
   router,
   render: h => h(App),
 }).$mount('#app')

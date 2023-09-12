@@ -4,16 +4,16 @@
     <Card>
       <template #title>
         <div class="input w-50">
-          <InputText v-model="name" class="p-inputtext-filled" type="text" placeholder="Название" :class="danger ? 'p-invalid' : ''"/>
+          <InputText v-model="name" class="p-inputtext-filled" type="text" :placeholder="$t('note-title')" :class="danger ? 'p-invalid' : ''"/>
         </div>
       </template>
       <template #content>
         <div class="input mt-5">
-          <h3>Описание:</h3>
+          <h3>{{ $t('desc') }}:</h3>
         </div>
         <Editor v-model="description" editorStyle="height: 320px" :class="danger ? 'p-invalid' : ''"/>
         <div class="input mt-5">
-          <h3>Статус: {{ statusText }}</h3>
+          <h3>{{ $t('status_text') }}: {{ statusText }}</h3>
         </div>
         <div class="input mt-5">
           <Slider v-model="status" style="width: 14rem" :max="3" :min="1"/>
@@ -21,7 +21,7 @@
       </template>
       <template #footer>
         <div class="input mt-5">
-          <Button label="Сохранить" icon="pi pi-save" iconPos="right" class="p-button-raised p-button-rounded p-button-success" @click="saveNote"/>
+          <Button :label="$t('save')" icon="pi pi-save" iconPos="right" class="p-button-raised p-button-rounded p-button-success" @click="saveNote"/>
         </div>
       </template>
     </Card>
@@ -35,7 +35,6 @@ import Editor from 'primevue/editor';
 import Slider from 'primevue/slider'
 import Button from 'primevue/button'
 import Toast from 'primevue/toast';
-import {mappedStatus} from "@/helpers";
 import {newNote, patchNote} from "@/api/notes";
 import {updateUser} from "@/api/user";
 
@@ -62,7 +61,7 @@ export default {
   },
   computed: {
     statusText() {
-      return mappedStatus.find(s => s.status === this.status).value
+      return this.$t(`status_${this.status}`)
     },
   },
   created() {
@@ -81,8 +80,8 @@ export default {
         this.danger = true
         this.$toast.add({
           severity: 'error',
-          summary: 'Ошибка',
-          detail: 'Необходимо заполнить название и описание.',
+          summary: this.$t('error'),
+          detail: this.$t('note-error'),
           life: 3000
         });
       }
@@ -94,8 +93,8 @@ export default {
             .catch(() => {
               this.$toast.add({
                 severity: 'error',
-                summary: 'Ошибка',
-                detail: 'Сервер не отвечает. Попробуйте позже.',
+                summary: this.$t('error'),
+                detail: this.$t('server-error'),
                 life: 3000
               });
             })
@@ -107,8 +106,8 @@ export default {
             .catch(() => {
               this.$toast.add({
                 severity: 'error',
-                summary: 'Ошибка',
-                detail: 'Сервер не отвечает. Попробуйте позже.',
+                summary: this.$t('error'),
+                detail: this.$t('server-error'),
                 life: 3000
               });
             })

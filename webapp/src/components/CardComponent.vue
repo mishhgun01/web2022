@@ -8,8 +8,8 @@
                 <Editor :value="opt.Description" :readonly="true" editorStyle="height: 250px"/>
             </template>
             <template #footer>
-                <Button icon="pi pi-trash" label="Удалить" @click="deleteNote"/>
-                <Button icon="pi pi-pencil" label="Редактировать" class="p-button-secondary" style="margin-left: .5em" @click="openCard"/>
+                <Button icon="pi pi-trash" :label="$t('delete')" @click="deleteNote"/>
+                <Button icon="pi pi-pencil" :label="$t('edit')" class="p-button-secondary" style="margin-left: .5em" @click="openCard"/>
             </template>
         </Card>
     </div>

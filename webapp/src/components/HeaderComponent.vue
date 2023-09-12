@@ -3,7 +3,7 @@
     <div class="speeddial-tooltip-demo" :style="{ position: 'relative', height: '400px' }">
         <SpeedDial :model="items" :radius="60" showIcon="pi pi-bars" hideIcon="pi pi-times" direction="down"/>
       <div class="title">
-        <h3 style="cursor: pointer" @click="click">Мои заметки</h3>
+        <h3 style="cursor: pointer" @click="click">{{ $t('my-notes') }}</h3>
       </div>
     </div>
     </div>
@@ -19,6 +19,7 @@ export default {
     },
     data(){
         return {
+          lang: false,
           items: [
             {
               label: 'Add',
@@ -43,10 +44,20 @@ export default {
                 this.$router.push("/sign-in")
               }
             }
+          ],
+          countries: [
+            {
+              name: "Russian",
+              flagName: "ru"
+            },
+            {
+              name: "British",
+              flagName: "en"
+            }
           ]
         }
     },
-    methods: {
+  methods: {
       click() {
         this.$router.push("/")
       }
@@ -72,4 +83,5 @@ export default {
   margin-left: 150px;
   color: white;
 }
+
 </style>
