@@ -14,18 +14,32 @@ func (api *API) HeadersMiddleware(next http.Handler) http.Handler {
 		if strings.Contains(r.URL.Path, "/api/") {
 			if r.Method == http.MethodOptions {
 
-				w.Header().Set("Content-Type", "application/json")
-				w.Header().Set("Access-Control-Allow-Origin", "*")
 				w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS")
 				w.Header().Set("Access-Control-Allow-Headers", "*")
+				w.Header().Set("Access-Control-Allow-Origin", "*")
+				w.Header().Set("Content-Type", "application/json")
 				return
 			}
 
-			w.Header().Set("Content-Type", "application/json")
-			w.Header().Set("Access-Control-Allow-Origin", "*")
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS")
 			w.Header().Set("Access-Control-Allow-Headers", "*")
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Content-Type", "application/json")
 		}
+		userName, _, ok := r.BasicAuth()
+		if !ok {
+			http.Error(w, errors.New("not authorized").Error(), http.StatusUnauthorized)
+		}
+
+		user, err := api.db.GetUserByName(userName)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		r.AddCookie(&http.Cookie{
+			Name:  "lastPath",
+			Value: user.LastPath,
+		})
 
 		next.ServeHTTP(w, r)
 	})
@@ -36,10 +50,6 @@ func (api *API) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(r.URL.Path, "/api/") {
 			if strings.Contains(r.URL.Path, "/api/v1/user") && (r.Method == http.MethodPost || r.Method == http.MethodOptions) {
-				w.Header().Set("Content-Type", "application/json")
-				w.Header().Set("Access-Control-Allow-Origin", "*")
-				w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS")
-				w.Header().Set("Access-Control-Allow-Headers", "*")
 				next.ServeHTTP(w, r)
 				return
 			}

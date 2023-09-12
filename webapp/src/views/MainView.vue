@@ -39,7 +39,7 @@ export default {
     }
   },
   created() {
-    document.cookie = "lastPath=/"
+    localStorage.setItem("lastPath", "/")
     const user = localStorage.getItem("User")
     if (!user) {
       this.$router.push("/sign-in")
@@ -55,6 +55,8 @@ export default {
             if (!this.options?.length) {
               this.newNote = true
             }
+            const path = r.config.headers.Cookie.split("=")[1]
+            this.$router.push(path)
           })
     },
     openCard(opt) {
@@ -74,7 +76,6 @@ export default {
       deleteNote(this.selectedCard)
           .then(()=> {
             this.getData()
-            console.log("Ok")
             this.displayMaximizable = false
           })
     },

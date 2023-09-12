@@ -3,7 +3,7 @@
     <div class="speeddial-tooltip-demo" :style="{ position: 'relative', height: '400px' }">
         <SpeedDial :model="items" :radius="60" showIcon="pi pi-bars" hideIcon="pi pi-times" direction="down"/>
       <div class="title">
-        <h3>Мои заметки</h3>
+        <h3 style="cursor: pointer" @click="click">Мои заметки</h3>
       </div>
     </div>
     </div>
@@ -19,45 +19,42 @@ export default {
     },
     data(){
         return {
-            items: [
-    {
-        label: 'Add',
-        icon: 'pi pi-pencil',
-        command: () => {
-          this.$router.push({
-            name: "noteCard", params: { opt: {
-                Name: "",
-                Description: "",
-                Status: 1,
-                isNew: true
+          items: [
+            {
+              label: 'Add',
+              icon: 'pi pi-pencil',
+              command: () => {
+                this.$router.push({
+                  name: "noteCard", params: { opt: {
+                    Name: "",
+                    Description: "",
+                    Status: 1,
+                    isNew: true
+                  }
+                }
+              });
+              }
+            },
+            {
+              label: 'Delete',
+              icon: 'pi pi-sign-out',
+              command: () => {
+                localStorage.clear();
+                this.$router.push("/sign-in")
               }
             }
-          });
+          ]
         }
-    },
-    {
-        label: 'Delete',
-        icon: 'pi pi-sign-out',
-        command: () => {
-            localStorage.clear();
-            this.$router.push("/sign-in")
-        }
-    }
-]
-        }
-    }, 
-    created() {
-        this.width = window.innerWidth;
-        window.addEventListener('resize', this.updateWidth);
     },
     methods: {
-        updateWidth() {
-            this.width = window.innerWidth;
-        }
+      click() {
+        this.$router.push("/")
+      }
     }
 }
 </script>
 <style scoped>
+
 .header {
     position: absolute;
     display: flex;

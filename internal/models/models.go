@@ -2,11 +2,11 @@ package models
 
 // User - модель данных пользователя.
 type User struct {
-	ID        int
-	Name      string
-	Login     string
-	Password  string
-	SessionID string
+	ID       int
+	Name     string
+	Login    string
+	Password string
+	LastPath string
 }
 
 // Note - модель данных заметки.

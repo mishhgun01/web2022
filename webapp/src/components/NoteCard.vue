@@ -37,6 +37,7 @@ import Button from 'primevue/button'
 import Toast from 'primevue/toast';
 import {mappedStatus} from "@/helpers";
 import {newNote, patchNote} from "@/api/notes";
+import {updateUser} from "@/api/user";
 
 export default {
   name: "NoteCard",
@@ -65,8 +66,8 @@ export default {
     },
   },
   created() {
-
-    document.cookie = "lastPath=" + this.$route.path
+    localStorage.setItem("lastPath", this.$route.path)
+    updateUser()
     const obj = this.$route.params.opt
     this.name = obj.Name || ""
     this.description = obj.Description || ""

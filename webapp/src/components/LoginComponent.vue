@@ -59,14 +59,14 @@ export default {
         onLogin() {
           this.spinner = true
           authUser(this.login, this.password)
-            .then( r=> {
-              console.log(r)
+            .then( () => {
               getUserInfo(this.login, this.password)
                 .then(response=> {
                     const authToken = btoa(`${response.data.Login}:${response.data.Password}`)
                     localStorage.setItem("authToken", authToken)
+                    localStorage.setItem("lastPath", response.data.LastPath)
                     localStorage.setItem("User", JSON.stringify(response.data))
-                    this.$router.push("/")
+                    this.$router.push(response.data.LastPath || "/")
                 })
                 .catch(() => {
                   this.$toast.add({severity:'error', summary: 'Ошибка', detail:'Сервер не отвечает. Попробуйте позже.', life: 3000});
@@ -81,14 +81,12 @@ export default {
               this.spinner = false
                 if (err.code === 401) {
                   this.spinner = false
-                  console.log(err)
                 }
             })
         },
         onRegister() {
             regUser(this.login, this.password)
             .then(r => {
-                console.log(r)
                 const authToken = btoa(`${r.data.Login}:${r.data.Password}`)
                 localStorage.setItem("authToken", authToken)
                 localStorage.setItem("User", JSON.stringify(r.data))

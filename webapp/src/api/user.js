@@ -24,3 +24,16 @@ export function getUserInfo(login, password) {
     })
     return authOpts.get(url + "/api/v1/user")
 }
+export function updateUser() {
+    const user = JSON.parse(localStorage.getItem("User"))
+    const authToken = btoa(`${user.Login}:${user.Password}`)
+
+    user.LastPath = localStorage.getItem("lastPath")
+    const authOpts = axios.create({
+        headers: {
+            Cookie: "lastPath="+localStorage.getItem("lastPath"),
+            Authorization : `Basic ${authToken}`
+        }
+    })
+    return authOpts.patch(url + "/api/v1/user", user)
+}

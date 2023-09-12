@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"strconv"
 	"web2022/internal/models"
@@ -69,7 +68,6 @@ func (api *API) NotesCRUDHandler(w http.ResponseWriter, r *http.Request) {
 	case http.MethodDelete:
 		var req models.Note
 		err := json.NewDecoder(r.Body).Decode(&req)
-		log.Println(req)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

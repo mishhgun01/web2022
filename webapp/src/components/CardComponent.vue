@@ -34,14 +34,6 @@ export default {
     props: {
         opt: Object
     },
-    watch: {
-        opt(val) {
-            console.log(val)
-        }
-    },
-    created() {
-        console.log(this.opt)
-    },
   methods: {
       openCard() {
         this.$emit("openCard", this.opt)

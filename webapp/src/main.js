@@ -25,9 +25,9 @@ const router = new VueRouter({
 })
 import ToastService from 'primevue/toastservice';
 Vue.use(ToastService);
-import { EmojiPickerPlugin } from 'vue-emoji-picker'
-Vue.use(EmojiPickerPlugin)
+import VueI18n from 'vue-i18n'
 
+Vue.use(VueI18n)
 Vue.use(VueRouter)
 new Vue({
   router,

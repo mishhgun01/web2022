@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
     name TEXT NOT NULL DEFAULT '',
     login TEXT NOT NULL DEFAULT '',
     password TEXT NOT NULL DEFAULT '',
-    session_id TEXT NOT NULL DEFAULT ''
+    last_path TEXT NOT NULL DEFAULT ''
 );
 
 CREATE TABLE IF NOT EXISTS notes(
