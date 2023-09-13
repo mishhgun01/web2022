@@ -42,7 +42,6 @@ export default {
     localStorage.setItem("locale", "ru")
     localStorage.setItem("lastPath", "/")
     const user = localStorage.getItem("User")
-    console.log(user)
     if (!user) {
       this.$router.push("/sign-in")
       return

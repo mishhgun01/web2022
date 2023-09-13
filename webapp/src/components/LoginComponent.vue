@@ -82,21 +82,23 @@ export default {
               })
             })
             .catch(err => {
-              this.$toast.add({
-                severity:'error',
-                summary: this.$t('error'),
-                detail: this.$t('server-error'),
-                life: 3000
-              });
               this.spinner = false
-                if (err.code === 401) {
+                if (err.code === "ERR_BAD_REQUEST") {
                   this.$toast.add({
                     severity:'error',
                     summary: this.$t('error'),
                     detail: this.$t('login-error'),
                     life: 3000
                   });
+                  return
                 }
+
+              this.$toast.add({
+                severity:'error',
+                summary: this.$t('error'),
+                detail: this.$t('server-error'),
+                life: 3000
+              });
             })
         },
         onRegister() {
